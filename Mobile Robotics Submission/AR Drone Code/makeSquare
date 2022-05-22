@@ -1,0 +1,10 @@
+#!/bin/bash
+
+rm squares
+#~ rm threshold
+
+g++ squares.cpp `pkg-config --cflags opencv` -o `basename $i .cpp` $i `pkg-config --libs opencv` -o squares
+./squares
+
+#~ g++ threshold.cpp `pkg-config --cflags opencv` -o `basename $i .cpp` $i `pkg-config --libs opencv` -o threshold
+#~ ./threshold

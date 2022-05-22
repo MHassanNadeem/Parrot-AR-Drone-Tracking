@@ -1,0 +1,9 @@
+(PC_tcpcam:9902): GLib-GObject-WARNING **: invalid unclassed pointer in cast to 'GstElement'
+
+(PC_tcpcam:9902): GStreamer-CRITICAL **: gst_element_set_state: assertion 'GST_IS_ELEMENT (element)' failed
+
+(PC_tcpcam:9902): GLib-GObject-WARNING **: invalid unclassed pointer in cast to 'GstObject'
+
+(PC_tcpcam:9902): GStreamer-CRITICAL **: gst_object_unref: assertion '((GObject *) object)->ref_count > 0' failed
+After Open
+

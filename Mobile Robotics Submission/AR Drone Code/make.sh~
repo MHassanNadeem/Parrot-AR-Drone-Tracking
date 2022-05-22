@@ -1,0 +1,58 @@
+#!/bin/bash
+
+fName=$1
+
+#~ Identify File Name
+if [ -f $fName".cpp" ]
+   then srcFile=$1".cpp"
+elif [ -f $fName".c" ]
+   then srcFile=$1".c"
+   else echo "File Not Found"
+   exit
+fi
+
+#~ Object File Names
+AR_OB="AR_"$1
+PC_OB="PC_"$1
+
+#~ echo $srcFile
+#~ echo $AR_OB
+#~ echo $PC_OB
+
+#~ Remove Old Complilations
+#~ {
+rm $AR_OB
+rm $PC_OB
+#~ } &>/dev/null # Silencer
+
+
+#~ Compile for PC
+echo "*******__PC__**********"
+g++ -I/usr/local/include/opencv -I/usr/local/include/opencv2 -L/usr/local/lib/ -g -o $PC_OB  $srcFile -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_contrib -lopencv_legacy -lopencv_stitching
+#~ g++ -I/usr/local/include/opencv -I/usr/local/include/opencv2 -L/usr/local/lib/ -g -o $PC_OB  $srcFile /usr/local/lib/libopencv_core.so -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_contrib -lopencv_legacy -lopencv_stitching
+
+
+echo "******__ARM__**********"
+#~ Compile for ARDrone - Generic Compiler
+arm-linux-gnueabi-g++-4.7 -I/home/hassan/OpenCV_ARM/install/include -I/home/hassan/OpenCV_ARM/install/include/opencv -I/home/hassan/OpenCV_ARM/install/include/opencv2 -L/home/hassan/OpenCV_ARM/install/lib -g -o $AR_OB  $srcFile -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_contrib -lopencv_legacy -lopencv_stitching
+
+#~ Compile for ARDrone - Official Compiler
+#~ arm-none-linux-gnueabi-g++ -I/home/hassan/OpenCV_ARM/install/include -I/home/hassan/OpenCV_ARM/install/include/opencv -I/home/hassan/OpenCV_ARM/install/include/opencv2 -L/home/hassan/OpenCV_ARM/install/lib -g -o $AR_OB  $srcFile -lopencv_core -lopencv_imgproc -lopencv_highgui #-lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_contrib -lopencv_legacy -lopencv_stitching
+
+
+
+if [ -f $PC_OB ]
+   then echo "PC Compilation Successful"
+   else echo "PC FAILED!!!!"
+fi
+
+if [ -f $AR_OB ]
+   then echo "AR_Drone Compilation Successful"
+   if [ $2 ]
+      then echo "Uploading File"
+      wput -u $AR_OB ftp://192.168.1.1
+   fi
+fi
+
+#~ codesourcery-arm-2009q3.sh
+#~ http://taghof.github.io/Navigation-for-Robots-with-WIFI-and-CV/blog/2012/01/13/Compiling-Code-For-The-ARDrone/
